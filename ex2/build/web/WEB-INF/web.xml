@@ -3,7 +3,6 @@
     <welcome-file-list>
         <welcome-file>LoginServlet</welcome-file>
     </welcome-file-list>
-
     <servlet>
         <servlet-name>AddProduct</servlet-name>
         <servlet-class>ex2.AddProduct</servlet-class>
@@ -12,6 +11,14 @@
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>ex2.MainServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>ex2.SearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addServlet</servlet-name>
+        <servlet-class>ex2.addServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddProduct</servlet-name>
         <url-pattern>/AddProduct</url-pattern>
@@ -19,6 +26,14 @@
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>
         <url-pattern>/MainServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/SearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addServlet</servlet-name>
+        <url-pattern>/addServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
