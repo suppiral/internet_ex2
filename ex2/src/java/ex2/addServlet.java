@@ -7,13 +7,13 @@
 package ex2;
 
 import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,33 +47,43 @@ public class addServlet extends HttpServlet {
         String password = "root";
         
         Connection conn = null;
-        PreparedStatement pst ;
-        try {
-            
-        Class.forName(driver).newInstance();
-        conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);
-        /*
-        TODO:
-        if( ID exists)
-            return to main page with error
-        else
+        try 
+        {   
+            Class.forName(driver).newInstance();
+            conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);
         
-        */
-        pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
+            // checks if ID exists
         
-        pst.setString(1, request.getParameter("addName"));
-        pst.setString(2, request.getParameter("addID"));
-        pst.setString(3, request.getParameter("addPrice"));
-        pst.setString(4, request.getParameter("addDescription"));
-        pst.setString(5, request.getParameter("addQuantity"));
+            String queryCheck = "SELECT * from messages WHERE msgid = ?";
+            PreparedStatement pst = conn.prepareStatement(queryCheck);
+            pst.setString(1, request.getParameter("addID"));
+            ResultSet resultSet = pst.executeQuery();
+            if(resultSet.next()) 
+            {
+                RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
+                out.println("Error: ID already exists, Please Change the ID"); 
+                rd.include(request, response);
+            }
+            //ID does not exist add to DB  
+            else
+            {
+                pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
         
-        pst.executeUpdate();
-        
-        /* 
-        TODO: Show The product with search
-        */
-        conn.close();
-        System.out.println("Disconnected from database");
+                pst.setString(1, request.getParameter("addName"));
+                pst.setString(2, request.getParameter("addID"));
+                pst.setString(3, request.getParameter("addPrice"));
+                pst.setString(4, request.getParameter("addDescription"));
+                pst.setString(5, request.getParameter("addQuantity"));
+
+                pst.executeUpdate();
+
+                //Show The product with search - call Search Servlet
+                RequestDispatcher rd=request.getRequestDispatcher("SearchServlet");
+                rd.forward(request,response);
+                
+                conn.close();
+                System.out.println("Disconnected from database");
+            }
         } catch (ClassNotFoundException e) {
         } catch (IllegalAccessException e) {
         } catch (InstantiationException e) {

@@ -7,10 +7,10 @@
 package ex2;
 
 import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
@@ -45,7 +45,9 @@ public class SearchServlet extends HttpServlet {
         String userName = "root";
         String password = "root";
 
-        Statement st;
+        PreparedStatement pst;
+        ResultSet rs ;
+        
         try {
         Class.forName(driver).newInstance();
         conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);
@@ -60,16 +62,22 @@ public class SearchServlet extends HttpServlet {
         else
             query = "select * from product where name='"+name+"' and id='"+ID+"'" ;
         
-        st = (Statement) conn.createStatement();
-        ResultSet rs = st.executeQuery(query);
+        pst =  conn.prepareStatement(query);
+        boolean isResult = pst.execute();
         out.println("<table border='1'>");
-        while(rs.next()){
-        out.println("<tr><td> Id </td><td><td><input type='text' value="+rs.getString(1)+"></td></tr>");
-        out.println("<tr><td> Name </td><td><td><input type='text' value="+rs.getString(2)+"></td></tr>");
-        out.println("<tr><td> Description </td><td><td><input type='text' value="+rs.getString(3)+"></td></tr>");
-        out.println("<tr><td> Price </td><td><td><input type='text' value="+rs.getString(4)+"></td></tr>");
-        out.println("<tr><td> Quantity </td><td><td><input type='text' value="+rs.getString(5)+"></td></tr>");
-        }
+        do {
+               rs = pst.getResultSet();
+               while(rs.next())
+               {
+                    out.println("<tr><td> Id </td><td><td><input type='text' value="+rs.getString(1)+"></td></tr>");
+                    out.println("<tr><td> Name </td><td><td><input type='text' value="+rs.getString(2)+"></td></tr>");
+                    out.println("<tr><td> Description </td><td><td><input type='text' value="+rs.getString(3)+"></td></tr>");
+                    out.println("<tr><td> Price </td><td><td><input type='text' value="+rs.getString(4)+"></td></tr>");
+                    out.println("<tr><td> Quantity </td><td><td><input type='text' value="+rs.getString(5)+"></td></tr>");
+               }
+
+                isResult = pst.getMoreResults();
+            } while (isResult);
         out.println("</table>");
         conn.close();
         System.out.println("Disconnected from database");
