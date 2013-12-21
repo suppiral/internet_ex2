@@ -6,8 +6,14 @@
 
 package ex2;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,19 +38,53 @@ public class addServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        
+        String url = "jdbc:mysql://localhost:3306/";
+        String dbName = "ex2";
+        String driver = "com.mysql.jdbc.Driver";
+        String userName = "root";
+        String password = "root";
+        
+        Connection conn = null;
+        PreparedStatement pst ;
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet addServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet addServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
+            
+        Class.forName(driver).newInstance();
+        conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);
+        /*
+        TODO:
+        if( ID exists)
+            return to main page with error
+        else
+        
+        */
+        pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
+        
+        pst.setString(1, request.getParameter("addName"));
+        pst.setString(2, request.getParameter("addID"));
+        pst.setString(3, request.getParameter("addPrice"));
+        pst.setString(4, request.getParameter("addDescription"));
+        pst.setString(5, request.getParameter("addQuantity"));
+        
+        pst.executeUpdate();
+        
+        /* 
+        TODO: Show The product with search
+        */
+        conn.close();
+        System.out.println("Disconnected from database");
+        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException e) {
+        } catch (InstantiationException e) {
+        } catch (SQLException e) {
+        }
+         finally {
+            try {
+                if (conn != null) { conn.close(); }
+			} catch (SQLException e) {
+			}
+
         }
     }
 
