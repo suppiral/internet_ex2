@@ -38,7 +38,7 @@ public class MainServlet extends MyServlet {
 	    PrintWriter out = response.getWriter();
 	    try {
 		if (isLoggedIn == null || isLoggedIn == false)
-		    response.sendRedirect("MainServlet");
+		    response.sendRedirect("LoginServlet");
 		else {
 		    out.println(getFileContent(HEADER_HTML_FILEPATH));
 		    out.println(getFileContent(HEADER_LOGOUT_FILEPATH));
