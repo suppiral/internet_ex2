@@ -80,11 +80,11 @@ public class SearchServlet extends HttpServlet {
                rs = pst.getResultSet();
                while(rs.next())
                {
-                    out.println("<tr><td> Id </td><td><td><input type='text' value="+rs.getString(1)+"></td></tr>");
-                    out.println("<tr><td> Name </td><td><td><input type='text' value="+rs.getString(2)+"></td></tr>");
-                    out.println("<tr><td> Description </td><td><td><input type='text' value="+rs.getString(3)+"></td></tr>");
-                    out.println("<tr><td> Price </td><td><td><input type='text' value="+rs.getString(4)+"></td></tr>");
-                    out.println("<tr><td> Quantity </td><td><td><input type='text' value="+rs.getString(5)+"></td></tr>");
+                    out.println("<tr><td> Id </td><td><input type='text' value="+rs.getString(1)+"></td></tr>");
+                    out.println("<tr><td> Name </td><td><input type='text' value="+rs.getString(2)+"></td></tr>");
+                    out.println("<tr><td> Description </td><td><input type='text' value="+rs.getString(3)+"></td></tr>");
+                    out.println("<tr><td> Price </td><td><input type='text' value="+rs.getString(4)+"></td></tr>");
+                    out.println("<tr><td> Quantity </td><td><input type='text' value="+rs.getString(5)+"></td></tr>");
                }
 
                 isResult = pst.getMoreResults();
