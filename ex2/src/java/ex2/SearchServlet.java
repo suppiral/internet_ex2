@@ -23,7 +23,16 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class SearchServlet extends HttpServlet {
-    
+    /**
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -46,11 +55,11 @@ public class SearchServlet extends HttpServlet {
         String name = request.getParameter("searchName");
         String ID = request.getParameter("searchID");
         String query;
-        if(ID.isEmpty())
+        if(ID.isEmpty())//only Name entered
             query = "select * from product where name='"+name+"'";
-        else if(name.isEmpty())
+        else if(name.isEmpty())//only ID entered
             query = "select * from product where id='"+ID+"'";
-        else
+        else //Name and ID entered
             query = "select * from product where name='"+name+"' and id='"+ID+"'" ;
         
         pst =  conn.prepareStatement(query);
