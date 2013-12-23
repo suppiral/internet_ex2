@@ -24,7 +24,18 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class addServlet extends HttpServlet {
-
+    private String theparam;    
+   /* @Override
+    public void init() throws ServletException {
+    theparam = getServletConfig().getInitParameter("someparam");
+    // The  parameters can also be retrieved using the servlet context
+    //theparam = getServletContext().getInitParameter("someparam");
+    
+    //you can output in a log file to debug etc...
+    getServletContext().log("the param is " + theparam);
+    // the log file is located somewhere like:
+    // NetBeans/glassfish-3.1.1/glassfish/domains/domain1/logs/server.log
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,7 +55,7 @@ public class addServlet extends HttpServlet {
         String dbName = "ex2";
         String driver = "com.mysql.jdbc.Driver";
         String userName = "root";
-        String password = "root";
+        String password = "";
         
         Connection conn = null;
         try 
@@ -54,11 +65,12 @@ public class addServlet extends HttpServlet {
         
             // checks if ID exists
         
-            String queryCheck = "SELECT * from messages WHERE msgid = ?";
+            String queryCheck = "SELECT * from product WHERE id = ?";
             PreparedStatement pst = conn.prepareStatement(queryCheck);
+            String a=request.getParameter("addID");
             pst.setString(1, request.getParameter("addID"));
             ResultSet resultSet = pst.executeQuery();
-            if(resultSet.next()) 
+            if(resultSet.next())
             {
                 RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
                 out.println("Error: ID already exists, Please Change the ID"); 
@@ -78,7 +90,8 @@ public class addServlet extends HttpServlet {
                 pst.executeUpdate();
 
                 //Show The product with search - call Search Servlet
-                RequestDispatcher rd=request.getRequestDispatcher("SearchServlet");
+                RequestDispatcher rd=request.getRequestDispatcher("/SearchServlet?searchName="
+                        +request.getParameter("addName")+"&searchID="+request.getParameter("addID"));
                 rd.forward(request,response);
                 
                 conn.close();

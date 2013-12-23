@@ -23,7 +23,18 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class SearchServlet extends HttpServlet {
-
+    private String theparam;
+@Override
+    public void init() throws ServletException {
+    theparam = getServletConfig().getInitParameter("someparam");
+    // The  parameters can also be retrieved using the servlet context
+    //theparam = getServletContext().getInitParameter("someparam");
+    
+    //you can output in a log file to debug etc...
+    getServletContext().log("the param is " + theparam);
+    // the log file is located somewhere like:
+    // NetBeans/glassfish-3.1.1/glassfish/domains/domain1/logs/server.log
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,7 +54,7 @@ public class SearchServlet extends HttpServlet {
         String dbName = "ex2";
         String driver = "com.mysql.jdbc.Driver";
         String userName = "root";
-        String password = "root";
+        String password = "";
 
         PreparedStatement pst;
         ResultSet rs ;
