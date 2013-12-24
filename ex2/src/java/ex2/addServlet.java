@@ -85,10 +85,10 @@ public class addServlet extends MyServlet {
                 conn.close();
                 System.out.println("Disconnected from database");
             }
-        } catch (ClassNotFoundException e) {
-        } catch (IllegalAccessException e) {
-        } catch (InstantiationException e) {
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException e) { // what to do here
+        } catch (IllegalAccessException e) { // or here
+        } catch (InstantiationException e) { // or here
+        } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
         }
          finally {
             try {
@@ -112,7 +112,7 @@ public class addServlet extends MyServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
-        processRequest(request, response);	
+        //processRequest(request, response);	
 	
     }
 
@@ -128,7 +128,12 @@ public class addServlet extends MyServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
+	PrintWriter out = response.getWriter();
+	out.println(getFileContent(HEADER_HTML_FILEPATH));
+	out.println(getFileContent(LOGOUT_HTML_FILEPATH));
         processRequest(request, response);
+	out.println(getFileContent(BACK_HTML_FILEPATH));
+	out.println(getFileContent(FOOTER_HTML_FILEPATH));
     }
 
     /**

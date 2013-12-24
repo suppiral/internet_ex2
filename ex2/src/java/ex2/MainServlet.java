@@ -73,7 +73,7 @@ public class MainServlet extends MyServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-	if (request.getParameter("addhName") != null)
+	if (request.getParameter("addName") != null)
 	     request.getRequestDispatcher("addServlet").forward(request, response);
     }
 
