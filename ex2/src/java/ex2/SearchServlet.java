@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Moti
  */
-public class SearchServlet extends HttpServlet {
+public class SearchServlet extends MyServlet {
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -107,7 +107,9 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+	redirectIfNotLoggedIn(request, response);
         processRequest(request, response);
+	
     }
 
     /**
@@ -121,6 +123,7 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+	redirectIfNotLoggedIn(request, response);
         processRequest(request, response);
     }
 

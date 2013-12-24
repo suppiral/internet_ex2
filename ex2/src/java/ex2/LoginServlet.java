@@ -50,7 +50,6 @@ public class LoginServlet extends MyServlet {
 		System.err.println(e.toString()); 
 		response.sendError(HttpServletResponse.SC_NO_CONTENT);
 	    }
-	    finally { try  { out.close(); } catch (Exception e) {} }
 	}
 	else
 	    response.sendRedirect("MainServlet");
@@ -83,12 +82,10 @@ public class LoginServlet extends MyServlet {
 		out.println(getFileContent(LOGIN_HTML_FILEPATH));
 		out.println(getFileContent(FOOTER_HTML_FILEPATH));
 
-	    } catch (Exception e) { 
+	 } catch (IOException e) { 
 		System.err.println(e.toString()); 
 		response.sendError(HttpServletResponse.SC_NO_CONTENT);
-	    }
-	    finally { try  { out.close(); } catch (Exception e) {} }
-	
+	 }
     }
 
     /**

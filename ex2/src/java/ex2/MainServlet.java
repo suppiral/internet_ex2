@@ -7,6 +7,7 @@ package ex2;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MainServlet", urlPatterns = {"/MainServlet"})
 public class MainServlet extends MyServlet {
+    protected final String ADDFORM_HTML_FILEPATH = "htmls/addForm.htm";
+    protected final String SEARCHFORM_HTML_FILEPATH = "htmls/searchForm.htm";
+    
+    protected void printMain(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+	try {
+	    PrintWriter out = response.getWriter();
+	    response.setContentType("text/html;charset=UTF-8");
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+	    out.println(getFileContent(HEADER_HTML_FILEPATH));
+	    out.println(getFileContent(LOGOUT_HTML_FILEPATH));
+	    out.println(getFileContent(SEARCHFORM_HTML_FILEPATH));
+	    out.println(getFileContent(ADDFORM_HTML_FILEPATH));
+	    out.println(getFileContent(FOOTER_HTML_FILEPATH));
+	} catch (FileNotFoundException e) { 
+	    System.err.println(e.toString()); 
+	    response.sendError(HttpServletResponse.SC_NO_CONTENT);
+	}
+    }
+    
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -32,25 +51,13 @@ public class MainServlet extends MyServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                Boolean isLoggedIn = (Boolean)request.getSession().getAttribute("loggedIn");
-        {
-	    response.setContentType("text/html;charset=UTF-8");
-	    PrintWriter out = response.getWriter();
-	    try {
-		if (isLoggedIn == null || isLoggedIn == false)
-		    response.sendRedirect("LoginServlet");
-		else {
-		    out.println(getFileContent(HEADER_HTML_FILEPATH));
-		    out.println(getFileContent(HEADER_LOGOUT_FILEPATH));
-		    out.println("nothing");
-		    /* todo: add include to other servlets */
-		    out.println(getFileContent(FOOTER_HTML_FILEPATH));
-		}
-	    } catch (FileNotFoundException e) { 
-		System.err.println(e.toString()); 
-		response.sendError(HttpServletResponse.SC_NO_CONTENT);
-	    }
-	    finally { try  { out.close(); } catch (Exception e) {} }
+                
+	{  
+	    redirectIfNotLoggedIn(request, response);
+	    if (request.getParameter("searchName") != null)
+		 request.getRequestDispatcher("SearchServlet").forward(request, response);
+
+	    else printMain(request, response);
 	}
     }
 
@@ -66,7 +73,8 @@ public class MainServlet extends MyServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+	if (request.getParameter("addhName") != null)
+	     request.getRequestDispatcher("addServlet").forward(request, response);
     }
 
     /**
