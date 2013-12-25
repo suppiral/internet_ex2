@@ -13,6 +13,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -50,45 +53,34 @@ public class addServlet extends MyServlet {
         try 
         {   
             Class.forName(driver).newInstance();
-            conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);
-        
-            // checks if ID exists
-        
-            String queryCheck = "SELECT * from product WHERE id = ?";
-            PreparedStatement pst = conn.prepareStatement(queryCheck);
-            pst.setString(1, request.getParameter("addID"));
-            ResultSet resultSet = pst.executeQuery();
-            if(resultSet.next())
-            {
-                RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
+            conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);            
+            PreparedStatement pst ;
+            pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
+            pst.setString(1, request.getParameter("addName"));
+            pst.setString(2, request.getParameter("addID"));
+            pst.setString(3, request.getParameter("addPrice"));
+            pst.setString(4, request.getParameter("addDescription"));
+            pst.setString(5, request.getParameter("addQuantity"));
+
+            pst.executeUpdate();
+            
+            out.println("<b>Product was added successfuly!</b><br>");
+            out.println("Name : "+request.getParameter("addName"));
+            out.println("<br>ID : "+request.getParameter("addID"));
+            out.println("<br>Price : "+request.getParameter("addPrice"));
+            out.println("<br>Description : "+request.getParameter("addDescription"));
+            out.println("<br>Quantity : "+request.getParameter("addQuantity"));
+            
+	    
+           
+        } catch (SQLIntegrityConstraintViolationException e) { // key violation
+                /*RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
                 out.println("Error: ID already exists, Please Change the ID"); 
-                rd.include(request, response);
-            }
-            //ID does not exist add to DB  
-            else
-            {
-                pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
-        
-                pst.setString(1, request.getParameter("addName"));
-                pst.setString(2, request.getParameter("addID"));
-                pst.setString(3, request.getParameter("addPrice"));
-                pst.setString(4, request.getParameter("addDescription"));
-                pst.setString(5, request.getParameter("addQuantity"));
-
-                pst.executeUpdate();
-
-                //Show The product with search - call Search Servlet
-                RequestDispatcher rd=request.getRequestDispatcher("/SearchServlet?searchName="
-                        +request.getParameter("addName")+"&searchID="+request.getParameter("addID"));
-                rd.forward(request,response);
-                
-                conn.close();
-                System.out.println("Disconnected from database");
-            }
-        } catch (ClassNotFoundException e) { // what to do here
-        } catch (IllegalAccessException e) { // or here
-        } catch (InstantiationException e) { // or here
+                rd.include(request, response);*/
+                request.getSession().setAttribute("idExist",true);
+                request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
+        } catch (Exception ex) {
         }
          finally {
             try {

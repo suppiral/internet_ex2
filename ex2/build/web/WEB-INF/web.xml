@@ -3,6 +3,26 @@
     <welcome-file-list>
         <welcome-file>LoginServlet</welcome-file>
     </welcome-file-list>
+    <context-param>
+        <param-name>url</param-name>
+        <param-value>"jdbc:mysql://localhost:3306/"</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbname</param-name>
+        <param-value>"ex2"</param-value>
+    </context-param>
+    <context-param>
+        <param-name>driver</param-name>
+        <param-value>"com.mysql.jdbc.Driver"</param-value>
+    </context-param>
+    <context-param>
+        <param-name>username</param-name>
+        <param-value>"root"</param-value>
+    </context-param>
+    <context-param>
+        <param-name>password</param-name>
+        <param-value>""</param-value>
+    </context-param>
     <servlet>
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>ex2.MainServlet</servlet-class>
@@ -37,5 +57,4 @@
             30
         </session-timeout>
     </session-config>
-  
 </web-app>
