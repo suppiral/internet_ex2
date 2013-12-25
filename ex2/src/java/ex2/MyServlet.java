@@ -24,22 +24,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author gil
  */
 public class MyServlet extends HttpServlet {
-
+    
     protected final String HEADER_HTML_FILEPATH = "htmls/header.htm";
     protected final String FOOTER_HTML_FILEPATH = "htmls/footer.htm";
     protected final String LOGOUT_HTML_FILEPATH = "htmls/logout.htm";
     protected final String BACK_HTML_FILEPATH   = "htmls/back.htm";
-    String url,dbName,driver,userName,password ;
     
-    @Override
-    public void init() throws ServletException {
-    url = getServletConfig().getInitParameter("url");
-    dbName = getServletConfig().getInitParameter("dbname");
-    driver = getServletConfig().getInitParameter("driver");
-    userName = getServletConfig().getInitParameter("username");
-    password = getServletConfig().getInitParameter("password");
-    }
-
     /**
      * 
      * @param filePath to read from
@@ -83,7 +73,7 @@ public class MyServlet extends HttpServlet {
 	if (con != null) {
             try {
                 con.close();
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
             }
 	}
 }

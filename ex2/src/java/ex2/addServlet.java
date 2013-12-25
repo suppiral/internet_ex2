@@ -22,6 +22,15 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class addServlet extends MyServlet {
+    String url,dbName,driver,userName,password ;
+    @Override
+    public void init() throws ServletException {
+    url =  getServletConfig().getInitParameter("url");
+    dbName =  getServletConfig().getInitParameter("dbname");
+    driver =  getServletConfig().getInitParameter("driver");
+    userName =  getServletConfig().getInitParameter("username");
+    password =  getServletConfig().getInitParameter("password");
+    }
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -32,6 +41,7 @@ public class addServlet extends MyServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch", "UseSpecificCatch"})
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -62,14 +72,11 @@ public class addServlet extends MyServlet {
             
 	    
            
-        } catch (SQLIntegrityConstraintViolationException e) { // key violation
-                /*RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
-                out.println("Error: ID already exists, Please Change the ID"); 
-                rd.include(request, response);*/
-                request.setAttribute("idExist","true");
-                request.getRequestDispatcher("MainServlet").forward(request, response);
+        }catch (SQLIntegrityConstraintViolationException e) { 
+               request.setAttribute("idExist","true");
+               request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
-        } catch (Exception ex) {
+        }catch(Exception e){
         }
          finally {
             closeEverything(null,pst,conn);

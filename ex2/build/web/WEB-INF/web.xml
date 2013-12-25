@@ -3,26 +3,6 @@
     <welcome-file-list>
         <welcome-file>LoginServlet</welcome-file>
     </welcome-file-list>
-    <context-param>
-        <param-name>url</param-name>
-        <param-value>"jdbc:mysql://localhost:3306/"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbname</param-name>
-        <param-value>"ex2"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>driver</param-name>
-        <param-value>"com.mysql.jdbc.Driver"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>username</param-name>
-        <param-value>"root"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>password</param-name>
-        <param-value>""</param-value>
-    </context-param>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>ex2.LoginServlet</servlet-class>
@@ -34,10 +14,60 @@
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>ex2.SearchServlet</servlet-class>
+        <init-param>
+            <description>the url</description>
+            <param-name>url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/</param-value>
+        </init-param>
+        <init-param>
+            <description>the dbname</description>
+            <param-name>dbname</param-name>
+            <param-value>ex2</param-value>
+        </init-param>
+        <init-param>
+            <description>the driver name</description>
+            <param-name>driver</param-name>
+            <param-value>com.mysql.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <description>the username</description>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <description>the password</description>
+            <param-name>password</param-name>
+            <param-value></param-value>
+        </init-param>
     </servlet>
     <servlet>
         <servlet-name>addServlet</servlet-name>
         <servlet-class>ex2.addServlet</servlet-class>
+        <init-param>
+            <description>the url</description>
+            <param-name>url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/</param-value>
+        </init-param>
+        <init-param>
+            <description>the dbname</description>
+            <param-name>dbname</param-name>
+            <param-value>ex2</param-value>
+        </init-param>
+        <init-param>
+            <description>the driver name</description>
+            <param-name>driver</param-name>
+            <param-value>com.mysql.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <description>the username</description>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <description>the password</description>
+            <param-name>password</param-name>
+            <param-value></param-value>
+        </init-param>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>

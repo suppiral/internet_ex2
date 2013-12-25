@@ -22,6 +22,16 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class SearchServlet extends MyServlet {
+    
+    String url,dbName,driver,userName,password ;
+    @Override
+    public void init() throws ServletException {
+    url =  getServletConfig().getInitParameter("url");
+    dbName =  getServletConfig().getInitParameter("dbname");
+    driver =  getServletConfig().getInitParameter("driver");
+    userName =  getServletConfig().getInitParameter("username");
+    password =  getServletConfig().getInitParameter("password");
+    }
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -32,6 +42,7 @@ public class SearchServlet extends MyServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @SuppressWarnings({"UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch"})
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -79,11 +90,9 @@ public class SearchServlet extends MyServlet {
             } while (isResult);
         out.println("</table>");
         System.out.println("Disconnected from database");
-        } catch (ClassNotFoundException e) { // what to do here?
-        } catch (IllegalAccessException e) { // or here?
-        } catch (InstantiationException e) { // or here?
         } catch (SQLException e) {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
+        }catch(Exception e){
         }
          finally {
             closeEverything(rs,pst,conn);
