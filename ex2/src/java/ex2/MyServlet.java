@@ -24,6 +24,7 @@ public class MyServlet extends HttpServlet {
     protected final String HEADER_HTML_FILEPATH = "htmls/header.htm";
     protected final String FOOTER_HTML_FILEPATH = "htmls/footer.htm";
     protected final String LOGOUT_HTML_FILEPATH = "htmls/logout.htm";
+    protected final String BACK_HTML_FILEPATH   = "htmls/back.htm";
     /**
      * 
      * @param filePath to read from

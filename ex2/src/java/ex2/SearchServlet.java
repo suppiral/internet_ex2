@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class SearchServlet extends MyServlet {
-    /**
+     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
      * <code>POST</code> methods.
@@ -56,24 +55,38 @@ public class SearchServlet extends MyServlet {
         String ID = request.getParameter("searchID");
         String query;
         if(ID.isEmpty())//only Name entered
-            query = "select * from product where name='"+name+"'";
+            query = "select * from product where name like '%"+name+"%'";
         else if(name.isEmpty())//only ID entered
             query = "select * from product where id='"+ID+"'";
         else //Name and ID entered
-            query = "select * from product where name='"+name+"' and id='"+ID+"'" ;
+            query = "select * from product where name like '%"+name+"%' and id='"+ID+"'" ;
         
         pst =  conn.prepareStatement(query);
         boolean isResult = pst.execute();
         out.println("<table border='1'>");
         do {
+                    out.print("<tr class=\"descTr\"><td> Id </td>");
+                    out.print("<td> Name </td>");
+                    out.print("<td> Description </td>");
+                    out.print("<td> Price </td>");
+                    out.println("<td> Quantity </td></tr>");
+            
+            
                rs = pst.getResultSet();
                while(rs.next())
                {
-                    out.println("<tr><td> Id </td><td><input type='text' value="+rs.getString(1)+"></td></tr>");
-                    out.println("<tr><td> Name </td><td><input type='text' value="+rs.getString(2)+"></td></tr>");
-                    out.println("<tr><td> Description </td><td><input type='text' value="+rs.getString(3)+"></td></tr>");
-                    out.println("<tr><td> Price </td><td><input type='text' value="+rs.getString(4)+"></td></tr>");
-                    out.println("<tr><td> Quantity </td><td><input type='text' value="+rs.getString(5)+"></td></tr>");
+                    out.print("<tr><td>"+rs.getString(1)+"</td>");
+                    out.print("<td>"+rs.getString(2)+"</td>");
+                    out.print("<td>"+rs.getString(3)+"</td>");
+                    out.print("<td>"+rs.getString(4)+"</td>");
+                    out.println("<td>"+rs.getString(5)+"</td></tr>");
+                /*    
+                    out.println("<tr><td> Id </td><td>"+rs.getString(1)+"</td></tr>");
+                    out.println("<tr><td> Name </td><td>"+rs.getString(2)+"</td></tr>");
+                    out.println("<tr><td> Description </td><td>"+rs.getString(3)+"</td></tr>");
+                    out.println("<tr><td> Price </td><td>"+rs.getString(4)+"</td></tr>");
+                    out.println("<tr><td> Quantity </td><td>"+rs.getString(5)+"</td></tr>");
+                    */
                }
 
                 isResult = pst.getMoreResults();
@@ -81,10 +94,11 @@ public class SearchServlet extends MyServlet {
         out.println("</table>");
         conn.close();
         System.out.println("Disconnected from database");
-        } catch (ClassNotFoundException e) {
-        } catch (IllegalAccessException e) {
-        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException e) { // what to do here?
+        } catch (IllegalAccessException e) { // or here?
+        } catch (InstantiationException e) { // or here?
         } catch (SQLException e) {
+	    out.println("<p>Cannot connect to database. please try again later.</p>");
         }
          finally {
             try {
@@ -108,7 +122,13 @@ public class SearchServlet extends MyServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
+	PrintWriter out = response.getWriter();
+	out.println(getFileContent(HEADER_HTML_FILEPATH));
+	out.println(getFileContent(LOGOUT_HTML_FILEPATH));
         processRequest(request, response);
+	out.println(getFileContent(BACK_HTML_FILEPATH));
+	out.println(getFileContent(FOOTER_HTML_FILEPATH));
+
 	
     }
 
@@ -124,7 +144,7 @@ public class SearchServlet extends MyServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
-        processRequest(request, response);
+       // processRequest(request, response); 
     }
 
     /**
