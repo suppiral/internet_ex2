@@ -11,14 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -77,7 +72,7 @@ public class addServlet extends MyServlet {
                 /*RequestDispatcher rd=request.getRequestDispatcher("MainServlet");  
                 out.println("Error: ID already exists, Please Change the ID"); 
                 rd.include(request, response);*/
-                request.getSession().setAttribute("idExist",true);
+                request.setAttribute("idExist","true");
                 request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
         } catch (Exception ex) {

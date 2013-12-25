@@ -7,7 +7,6 @@ package ex2;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +29,25 @@ public class MainServlet extends MyServlet {
 
 	    out.println(getFileContent(HEADER_HTML_FILEPATH));
 	    out.println(getFileContent(LOGOUT_HTML_FILEPATH));
+            
+            String addFormContent = getFileContent(ADDFORM_HTML_FILEPATH);
+            
+            String idExists = null;
+            try { idExists = (String)request.getAttribute("idExist"); }
+            catch (Exception e) { }
+            if (idExists != null && idExists.equals("true")) 
+            {
+                // print error
+                out.println("<p style=\"color: red;\">error while adding product to database: id already exists</p>");
+                // add request paramters to the form
+                addFormContent = addFormContent.replace("name=\"addName\"", "name=\"addName\" value=\"" + request.getParameter("addName") +"\"");
+                addFormContent = addFormContent.replace("name=\"addID\"", "name=\"addID\" value=\"" + request.getParameter("addID") +"\"");
+                addFormContent = addFormContent.replace("name=\"addPrice\"", "name=\"addPrice\" value=\"" + request.getParameter("addPrice") +"\"");
+                addFormContent = addFormContent.replace("</textarea>", request.getParameter("addDescription") +"</textarea>");
+                addFormContent = addFormContent.replace("name=\"addQuantity\"", "name=\"addQuantity\" value=\"" + request.getParameter("addQuantity") +"\"");
+            }
 	    out.println(getFileContent(SEARCHFORM_HTML_FILEPATH));
-	    out.println(getFileContent(ADDFORM_HTML_FILEPATH));
+	    out.println(addFormContent);
 	    out.println(getFileContent(FOOTER_HTML_FILEPATH));
 	} catch (FileNotFoundException e) { 
 	    System.err.println(e.toString()); 
@@ -73,8 +89,18 @@ public class MainServlet extends MyServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-	if (request.getParameter("addName") != null)
-	     request.getRequestDispatcher("addServlet").forward(request, response);
+        redirectIfNotLoggedIn(request, response);
+        
+        if (request.getParameter("addName") != null)
+        {
+            String idExists = null;
+            try { idExists = (String)request.getAttribute("idExist"); }
+            catch (Exception e) { }
+            if (idExists != null && idExists.equals("true"))
+                printMain(request, response);
+            else
+	        request.getRequestDispatcher("addServlet").forward(request, response);
+        }
     }
 
     /**
