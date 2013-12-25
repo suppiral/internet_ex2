@@ -55,24 +55,38 @@ public class SearchServlet extends MyServlet {
         String ID = request.getParameter("searchID");
         String query;
         if(ID.isEmpty())//only Name entered
-            query = "select * from product where name='"+name+"'";
+            query = "select * from product where name like '%"+name+"%'";
         else if(name.isEmpty())//only ID entered
             query = "select * from product where id='"+ID+"'";
         else //Name and ID entered
-            query = "select * from product where name='"+name+"' and id='"+ID+"'" ;
+            query = "select * from product where name like '%"+name+"%' and id='"+ID+"'" ;
         
         pst =  conn.prepareStatement(query);
         boolean isResult = pst.execute();
         out.println("<table border='1'>");
         do {
+                    out.print("<tr class=\"descTr\"><td> Id </td>");
+                    out.print("<td> Name </td>");
+                    out.print("<td> Description </td>");
+                    out.print("<td> Price </td>");
+                    out.println("<td> Quantity </td></tr>");
+            
+            
                rs = pst.getResultSet();
                while(rs.next())
                {
+                    out.print("<tr><td>"+rs.getString(1)+"</td>");
+                    out.print("<td>"+rs.getString(2)+"</td>");
+                    out.print("<td>"+rs.getString(3)+"</td>");
+                    out.print("<td>"+rs.getString(4)+"</td>");
+                    out.println("<td>"+rs.getString(5)+"</td></tr>");
+                /*    
                     out.println("<tr><td> Id </td><td>"+rs.getString(1)+"</td></tr>");
                     out.println("<tr><td> Name </td><td>"+rs.getString(2)+"</td></tr>");
                     out.println("<tr><td> Description </td><td>"+rs.getString(3)+"</td></tr>");
                     out.println("<tr><td> Price </td><td>"+rs.getString(4)+"</td></tr>");
                     out.println("<tr><td> Quantity </td><td>"+rs.getString(5)+"</td></tr>");
+                    */
                }
 
                 isResult = pst.getMoreResults();
