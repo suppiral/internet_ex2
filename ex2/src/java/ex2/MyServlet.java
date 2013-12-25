@@ -9,6 +9,10 @@ package ex2;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +29,17 @@ public class MyServlet extends HttpServlet {
     protected final String FOOTER_HTML_FILEPATH = "htmls/footer.htm";
     protected final String LOGOUT_HTML_FILEPATH = "htmls/logout.htm";
     protected final String BACK_HTML_FILEPATH   = "htmls/back.htm";
+    String url,dbName,driver,userName,password ;
+    
+    @Override
+    public void init() throws ServletException {
+    url = getServletConfig().getInitParameter("url");
+    dbName = getServletConfig().getInitParameter("dbname");
+    driver = getServletConfig().getInitParameter("driver");
+    userName = getServletConfig().getInitParameter("username");
+    password = getServletConfig().getInitParameter("password");
+    }
+
     /**
      * 
      * @param filePath to read from
@@ -50,4 +65,26 @@ public class MyServlet extends HttpServlet {
 	if (isLoggedIn == null || isLoggedIn == false)
 	    response.sendRedirect("LoginServlet");
     }
+    
+    public static void closeEverything(ResultSet rs, PreparedStatement pst,
+		Connection con) {
+	if (rs != null) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (pst != null) {
+		try {
+			pst.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+            }
+	}
+}
 }

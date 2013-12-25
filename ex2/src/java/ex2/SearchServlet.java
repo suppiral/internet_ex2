@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Moti
  */
 public class SearchServlet extends MyServlet {
-     /**
+    /**
      * Processes requests for both HTTP
      * <code>GET</code> and
      * <code>POST</code> methods.
@@ -38,14 +38,8 @@ public class SearchServlet extends MyServlet {
         PrintWriter out = response.getWriter();
         
         Connection conn = null;
-        String url = "jdbc:mysql://localhost:3306/";
-        String dbName = "ex2";
-        String driver = "com.mysql.jdbc.Driver";
-        String userName = "root";
-        String password = "";
-
-        PreparedStatement pst;
-        ResultSet rs ;
+        PreparedStatement pst = null;
+        ResultSet rs = null ;
         
         try {
         Class.forName(driver).newInstance();
@@ -80,19 +74,10 @@ public class SearchServlet extends MyServlet {
                     out.print("<td>"+rs.getString(3)+"</td>");
                     out.print("<td>"+rs.getString(4)+"</td>");
                     out.println("<td>"+rs.getString(5)+"</td></tr>");
-                /*    
-                    out.println("<tr><td> Id </td><td>"+rs.getString(1)+"</td></tr>");
-                    out.println("<tr><td> Name </td><td>"+rs.getString(2)+"</td></tr>");
-                    out.println("<tr><td> Description </td><td>"+rs.getString(3)+"</td></tr>");
-                    out.println("<tr><td> Price </td><td>"+rs.getString(4)+"</td></tr>");
-                    out.println("<tr><td> Quantity </td><td>"+rs.getString(5)+"</td></tr>");
-                    */
                }
-
                 isResult = pst.getMoreResults();
             } while (isResult);
         out.println("</table>");
-        conn.close();
         System.out.println("Disconnected from database");
         } catch (ClassNotFoundException e) { // what to do here?
         } catch (IllegalAccessException e) { // or here?
@@ -101,12 +86,8 @@ public class SearchServlet extends MyServlet {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
         }
          finally {
-            try {
-                if (conn != null) { conn.close(); }
-			} catch (SQLException e) {
-			}
-
-        }
+            closeEverything(rs,pst,conn);
+         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -156,5 +137,4 @@ public class SearchServlet extends MyServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

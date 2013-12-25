@@ -37,19 +37,13 @@ public class addServlet extends MyServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        
-        String url = "jdbc:mysql://localhost:3306/";
-        String dbName = "ex2";
-        String driver = "com.mysql.jdbc.Driver";
-        String userName = "root";
-        String password = "";
-        
         Connection conn = null;
+        PreparedStatement pst=null ;
         try 
         {   
             Class.forName(driver).newInstance();
             conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);            
-            PreparedStatement pst ;
+            
             pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
             pst.setString(1, request.getParameter("addName"));
             pst.setString(2, request.getParameter("addID"));
@@ -78,11 +72,7 @@ public class addServlet extends MyServlet {
         } catch (Exception ex) {
         }
          finally {
-            try {
-                if (conn != null) { conn.close(); }
-			} catch (SQLException e) {
-			}
-
+            closeEverything(null,pst,conn);
         }
     }
 
