@@ -57,7 +57,7 @@ public class MyServlet extends HttpServlet {
     }
     
     public static void closeEverything(ResultSet rs, PreparedStatement pst,
-		Connection con) {
+            Connection con) {
 	if (rs != null) {
 		try {
 			rs.close();

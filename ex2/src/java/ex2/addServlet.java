@@ -79,7 +79,7 @@ public class addServlet extends MyServlet {
         }catch(Exception e){
         }
          finally {
-            closeEverything(null,pst,conn);
+            closeEverything(pst,conn);
         }
     }
 
@@ -129,5 +129,19 @@ public class addServlet extends MyServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+   public static void closeEverything(PreparedStatement pst,Connection con) 
+   {
+	if (pst != null) {
+		try {
+                    pst.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+            }
+	}
+    }
 }
