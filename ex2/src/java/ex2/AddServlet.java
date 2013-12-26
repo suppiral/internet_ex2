@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Moti and Gil Mizrahi
  */
-public class addServlet extends MyServlet {
+public class AddServlet extends MyServlet {
     //Members of the Servlet , refer to database login.
     private String url,dbName,driver,userName,password ;
     
@@ -48,7 +48,7 @@ public class addServlet extends MyServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+         
         Connection conn = null;
         PreparedStatement pst=null ;
         try 

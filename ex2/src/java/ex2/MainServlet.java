@@ -99,7 +99,7 @@ public class MainServlet extends MyServlet {
             if (idExists != null && idExists.equals("true"))
                 printMain(request, response);
             else
-	        request.getRequestDispatcher("addServlet").forward(request, response);
+	        request.getRequestDispatcher("AddServlet").forward(request, response);
         }
     }
 
