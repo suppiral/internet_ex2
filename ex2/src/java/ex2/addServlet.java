@@ -19,10 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Moti
+ * @author Moti and Gil Mizrahi
  */
 public class addServlet extends MyServlet {
-    String url,dbName,driver,userName,password ;
+    //Members of the Servlet , refer to database login.
+    private String url,dbName,driver,userName,password ;
+    
     @Override
     public void init() throws ServletException {
     url =  getServletConfig().getInitParameter("url");
@@ -129,6 +131,12 @@ public class addServlet extends MyServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    /**
+     * This function makes sure we close connection and p.statement
+     * this function is called from finally block
+     * @param pst Prepared Statement
+     * @param con Connection
+     */
    public static void closeEverything(PreparedStatement pst,Connection con) 
    {
 	if (pst != null) {

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author gil
+ * @author Moti and Gil Mizrahi
  */
 public class MyServlet extends HttpServlet {
     
@@ -55,26 +55,4 @@ public class MyServlet extends HttpServlet {
 	if (isLoggedIn == null || isLoggedIn == false)
 	    response.sendRedirect("LoginServlet");
     }
-    
-    public static void closeEverything(ResultSet rs, PreparedStatement pst,
-            Connection con) {
-	if (rs != null) {
-		try {
-			rs.close();
-		} catch (SQLException e) {
-		}
-	}
-	if (pst != null) {
-		try {
-			pst.close();
-		} catch (SQLException e) {
-		}
-	}
-	if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-            }
-	}
-}
 }

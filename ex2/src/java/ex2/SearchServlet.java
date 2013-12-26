@@ -19,11 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Moti
+ * @author Moti and Gil Mizrahi
  */
 public class SearchServlet extends MyServlet {
+    //Members of the Servlet , refer to database login.
+    private String url,dbName,driver,userName,password ;
     
-    String url,dbName,driver,userName,password ;
+    
+    /**
+     * init function, configuring the members values from web.xml
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     public void init() throws ServletException {
     url =  getServletConfig().getInitParameter("url");
@@ -32,11 +38,13 @@ public class SearchServlet extends MyServlet {
     userName =  getServletConfig().getInitParameter("username");
     password =  getServletConfig().getInitParameter("password");
     }
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
      * <code>POST</code> methods.
-     *
+     * This function searches for a given product in the database
+     * and printed in an HTML table.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -48,9 +56,9 @@ public class SearchServlet extends MyServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        Connection conn = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null ;
+        Connection conn = null;//the connection
+        PreparedStatement pst = null;//prepared statement
+        ResultSet rs = null ;//result set
         
         try {
         Class.forName(driver).newInstance();
@@ -70,13 +78,11 @@ public class SearchServlet extends MyServlet {
         boolean isResult = pst.execute();
         out.println("<table border='1'>");
         do {
-                    out.print("<tr class=\"descTr\"><td> Id </td>");
-                    out.print("<td> Name </td>");
-                    out.print("<td> Description </td>");
-                    out.print("<td> Price </td>");
-                    out.println("<td> Quantity </td></tr>");
-            
-            
+               out.print("<tr class=\"descTr\"><td> Id </td>");
+               out.print("<td> Name </td>");
+               out.print("<td> Description </td>");
+               out.print("<td> Price </td>");
+               out.println("<td> Quantity </td></tr>");
                rs = pst.getResultSet();
                while(rs.next())
                {
@@ -86,15 +92,16 @@ public class SearchServlet extends MyServlet {
                     out.print("<td>"+rs.getString(4)+"</td>");
                     out.println("<td>"+rs.getString(5)+"</td></tr>");
                }
-                isResult = pst.getMoreResults();
-            } while (isResult);
+               isResult = pst.getMoreResults();
+            }while (isResult);
         out.println("</table>");
         System.out.println("Disconnected from database");
-        } catch (SQLException e) {
+        }catch (SQLException e) {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
         }catch(Exception e){
         }
          finally {
+            //Closing connection,result sets and prepared statement
             closeEverything(rs,pst,conn);
          }
     }
@@ -146,4 +153,33 @@ public class SearchServlet extends MyServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    /**
+     * This function makes sure we close connection result set and p.statement
+     * this function is called from finally block
+     * @param rs Result Set
+     * @param pst Prepared Statement
+     * @param con Connection
+     */
+    public static void closeEverything(ResultSet rs, PreparedStatement pst,
+            Connection con) {
+	if (rs != null) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (pst != null) {
+		try {
+			pst.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+            }
+	}
+    }
 }
