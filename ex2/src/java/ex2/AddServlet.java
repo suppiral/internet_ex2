@@ -27,11 +27,11 @@ public class AddServlet extends MyServlet {
     
     @Override
     public void init() throws ServletException {
-    url =  getServletConfig().getInitParameter("url");
-    dbName =  getServletConfig().getInitParameter("dbname");
-    driver =  getServletConfig().getInitParameter("driver");
-    userName =  getServletConfig().getInitParameter("username");
-    password =  getServletConfig().getInitParameter("password");
+	url =  getServletConfig().getInitParameter("url");
+	dbName =  getServletConfig().getInitParameter("dbname");
+	driver =  getServletConfig().getInitParameter("driver");
+	userName =  getServletConfig().getInitParameter("username");
+	password =  getServletConfig().getInitParameter("password");
     }
     /**
      * Processes requests for both HTTP
@@ -56,6 +56,7 @@ public class AddServlet extends MyServlet {
             Class.forName(driver).newInstance();
             conn = (Connection) DriverManager.getConnection(url+dbName,userName,password);            
             
+	    // preventing SQL injection
             pst=conn.prepareStatement("INSERT INTO product(name,id,price,description,quantity) VALUES(?,?,?,?,?)");
             pst.setString(1, request.getParameter("addName"));
             pst.setString(2, request.getParameter("addID"));
@@ -64,19 +65,19 @@ public class AddServlet extends MyServlet {
             pst.setString(5, request.getParameter("addQuantity"));
 
             pst.executeUpdate();
-            
+	    
+            // print user feedback
             out.println("<b>Product was added successfuly!</b><br>");
             out.println("Name : "+request.getParameter("addName"));
             out.println("<br>ID : "+request.getParameter("addID"));
             out.println("<br>Price : "+request.getParameter("addPrice"));
             out.println("<br>Description : "+request.getParameter("addDescription"));
             out.println("<br>Quantity : "+request.getParameter("addQuantity"));
-            
 	    
-           
         }catch (SQLIntegrityConstraintViolationException e) { 
-               request.setAttribute("idExist","true");
-               request.getRequestDispatcher("MainServlet").forward(request, response);
+	   
+            request.setAttribute("idExist","true");
+            request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
         }catch(Exception e){
         }

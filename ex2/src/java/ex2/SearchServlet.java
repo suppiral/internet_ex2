@@ -32,11 +32,11 @@ public class SearchServlet extends MyServlet {
      */
     @Override
     public void init() throws ServletException {
-    url =  getServletConfig().getInitParameter("url");
-    dbName =  getServletConfig().getInitParameter("dbname");
-    driver =  getServletConfig().getInitParameter("driver");
-    userName =  getServletConfig().getInitParameter("username");
-    password =  getServletConfig().getInitParameter("password");
+	url =  getServletConfig().getInitParameter("url");
+	dbName =  getServletConfig().getInitParameter("dbname");
+	driver =  getServletConfig().getInitParameter("driver");
+	userName =  getServletConfig().getInitParameter("username");
+	password =  getServletConfig().getInitParameter("password");
     }
     
     /**
@@ -67,14 +67,28 @@ public class SearchServlet extends MyServlet {
         String name = request.getParameter("searchName");
         String ID = request.getParameter("searchID");
         String query;
+	
+	
         if(ID.isEmpty())//only Name entered
-            query = "select * from product where name like '%"+name+"%'";
+	{
+            query = "select * from product where name like ?";
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, "%" + name + "%");
+	}
         else if(name.isEmpty())//only ID entered
-            query = "select * from product where id='"+ID+"'";
+	{
+            query = "select * from product where id= ?";
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, ID);
+	}
         else //Name and ID entered
-            query = "select * from product where name like '%"+name+"%' and id='"+ID+"'" ;
+	{
+            query = "select * from product where name like ? and id= ? " ;
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, "%" + name + "%");
+            pst.setString(2, ID);   
+	}
         
-        pst =  conn.prepareStatement(query);
         boolean isResult = pst.execute();
         out.println("<table border='1'>");
         do {
@@ -141,7 +155,7 @@ public class SearchServlet extends MyServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
-       // processRequest(request, response); 
+ 
     }
 
     /**

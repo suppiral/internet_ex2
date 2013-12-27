@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * The MainServlet displays the main page and acts as a dispatcher for search and
+ * add servlets
  * @author Moti and Gil Mizrahi
  */
 @WebServlet(name = "MainServlet", urlPatterns = {"/MainServlet"})
