@@ -19,33 +19,46 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Moti
+ * @author Moti and Gil Mizrahi
  */
 public class SearchServlet extends MyServlet {
-     /**
+    //Members of the Servlet , refer to database login.
+    private String url,dbName,driver,userName,password ;
+    
+    
+    /**
+     * init function, configuring the members values from web.xml
+     * @throws ServletException if a servlet-specific error occurs
+     */
+    @Override
+    public void init() throws ServletException {
+	url =  getServletConfig().getInitParameter("url");
+	dbName =  getServletConfig().getInitParameter("dbname");
+	driver =  getServletConfig().getInitParameter("driver");
+	userName =  getServletConfig().getInitParameter("username");
+	password =  getServletConfig().getInitParameter("password");
+    }
+    
+    /**
      * Processes requests for both HTTP
      * <code>GET</code> and
      * <code>POST</code> methods.
-     *
+     * This function searches for a given product in the database
+     * and printed in an HTML table.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @SuppressWarnings({"UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch"})
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        Connection conn = null;
-        String url = "jdbc:mysql://localhost:3306/";
-        String dbName = "ex2";
-        String driver = "com.mysql.jdbc.Driver";
-        String userName = "root";
-        String password = "";
-
-        PreparedStatement pst;
-        ResultSet rs ;
+        Connection conn = null;//the connection
+        PreparedStatement pst = null;//prepared statement
+        ResultSet rs = null ;//result set
         
         try {
         Class.forName(driver).newInstance();
@@ -54,24 +67,36 @@ public class SearchServlet extends MyServlet {
         String name = request.getParameter("searchName");
         String ID = request.getParameter("searchID");
         String query;
+	
+	
         if(ID.isEmpty())//only Name entered
-            query = "select * from product where name like '%"+name+"%'";
+	{
+            query = "select * from product where name like ?";
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, "%" + name + "%");
+	}
         else if(name.isEmpty())//only ID entered
-            query = "select * from product where id='"+ID+"'";
+	{
+            query = "select * from product where id= ?";
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, ID);
+	}
         else //Name and ID entered
-            query = "select * from product where name like '%"+name+"%' and id='"+ID+"'" ;
+	{
+            query = "select * from product where name like ? and id= ? " ;
+	    pst=conn.prepareStatement(query);
+            pst.setString(1, "%" + name + "%");
+            pst.setString(2, ID);   
+	}
         
-        pst =  conn.prepareStatement(query);
         boolean isResult = pst.execute();
         out.println("<table border='1'>");
         do {
-                    out.print("<tr class=\"descTr\"><td> Id </td>");
-                    out.print("<td> Name </td>");
-                    out.print("<td> Description </td>");
-                    out.print("<td> Price </td>");
-                    out.println("<td> Quantity </td></tr>");
-            
-            
+               out.print("<tr class=\"descTr\"><td> Id </td>");
+               out.print("<td> Name </td>");
+               out.print("<td> Description </td>");
+               out.print("<td> Price </td>");
+               out.println("<td> Quantity </td></tr>");
                rs = pst.getResultSet();
                while(rs.next())
                {
@@ -80,33 +105,19 @@ public class SearchServlet extends MyServlet {
                     out.print("<td>"+rs.getString(3)+"</td>");
                     out.print("<td>"+rs.getString(4)+"</td>");
                     out.println("<td>"+rs.getString(5)+"</td></tr>");
-                /*    
-                    out.println("<tr><td> Id </td><td>"+rs.getString(1)+"</td></tr>");
-                    out.println("<tr><td> Name </td><td>"+rs.getString(2)+"</td></tr>");
-                    out.println("<tr><td> Description </td><td>"+rs.getString(3)+"</td></tr>");
-                    out.println("<tr><td> Price </td><td>"+rs.getString(4)+"</td></tr>");
-                    out.println("<tr><td> Quantity </td><td>"+rs.getString(5)+"</td></tr>");
-                    */
                }
-
-                isResult = pst.getMoreResults();
-            } while (isResult);
+               isResult = pst.getMoreResults();
+            }while (isResult);
         out.println("</table>");
-        conn.close();
         System.out.println("Disconnected from database");
-        } catch (ClassNotFoundException e) { // what to do here?
-        } catch (IllegalAccessException e) { // or here?
-        } catch (InstantiationException e) { // or here?
-        } catch (SQLException e) {
+        }catch (SQLException e) {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
+        }catch(Exception e){
         }
          finally {
-            try {
-                if (conn != null) { conn.close(); }
-			} catch (SQLException e) {
-			}
-
-        }
+            //Closing connection,result sets and prepared statement
+            closeEverything(rs,pst,conn);
+         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -144,7 +155,7 @@ public class SearchServlet extends MyServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	redirectIfNotLoggedIn(request, response);
-       // processRequest(request, response); 
+ 
     }
 
     /**
@@ -156,5 +167,33 @@ public class SearchServlet extends MyServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+    /**
+     * This function makes sure we close connection result set and p.statement
+     * this function is called from finally block
+     * @param rs Result Set
+     * @param pst Prepared Statement
+     * @param con Connection
+     */
+    public static void closeEverything(ResultSet rs, PreparedStatement pst,
+            Connection con) {
+	if (rs != null) {
+		try {
+			rs.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (pst != null) {
+		try {
+			pst.close();
+		} catch (SQLException e) {
+		}
+	}
+	if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+            }
+	}
+    }
 }

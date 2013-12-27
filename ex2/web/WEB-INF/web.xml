@@ -3,26 +3,20 @@
     <welcome-file-list>
         <welcome-file>LoginServlet</welcome-file>
     </welcome-file-list>
-    <context-param>
-        <param-name>url</param-name>
-        <param-value>"jdbc:mysql://localhost:3306/"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbname</param-name>
-        <param-value>"ex2"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>driver</param-name>
-        <param-value>"com.mysql.jdbc.Driver"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>username</param-name>
-        <param-value>"root"</param-value>
-    </context-param>
-    <context-param>
-        <param-name>password</param-name>
-        <param-value>""</param-value>
-    </context-param>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>ex2.LoginServlet</servlet-class>
+        <init-param>
+            <description>username for login</description>
+            <param-name>username</param-name>
+            <param-value>admin</param-value>
+        </init-param>
+        <init-param>
+            <description>password for login</description>
+            <param-name>password</param-name>
+            <param-value>password</param-value>
+        </init-param>
+    </servlet>
     <servlet>
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>ex2.MainServlet</servlet-class>
@@ -30,16 +24,73 @@
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>ex2.SearchServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>addServlet</servlet-name>
-        <servlet-class>ex2.addServlet</servlet-class>
         <init-param>
-            <description>some random parameter</description>
-            <param-name>someparam</param-name>
-            <param-value>For NetBeans</param-value>
+            <description>the url</description>
+            <param-name>url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/</param-value>
+        </init-param>
+        <init-param>
+            <description>the dbname</description>
+            <param-name>dbname</param-name>
+            <param-value>ex2</param-value>
+        </init-param>
+        <init-param>
+            <description>the driver name</description>
+            <param-name>driver</param-name>
+            <param-value>com.mysql.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <description>the username</description>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <description>the password</description>
+            <param-name>password</param-name>
+            <param-value/>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>AddServlet</servlet-name>
+        <servlet-class>ex2.AddServlet</servlet-class>
+        <init-param>
+            <description>the url</description>
+            <param-name>url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/</param-value>
+        </init-param>
+        <init-param>
+            <description>the dbname</description>
+            <param-name>dbname</param-name>
+            <param-value>ex2</param-value>
+        </init-param>
+        <init-param>
+            <description>the driver name</description>
+            <param-name>driver</param-name>
+            <param-value>com.mysql.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <description>the username</description>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <description>the password</description>
+            <param-name>password</param-name>
+            <param-value/>
+        </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>ex2.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MyServlet</servlet-name>
+        <servlet-class>ex2.MyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>
         <url-pattern>/MainServlet</url-pattern>
@@ -49,8 +100,16 @@
         <url-pattern>/SearchServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>addServlet</servlet-name>
-        <url-pattern>/addServlet</url-pattern>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyServlet</servlet-name>
+        <url-pattern>/MyServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddServlet</servlet-name>
+        <url-pattern>/AddServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

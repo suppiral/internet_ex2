@@ -16,19 +16,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author gil
+ * Base class for Servlets in order to share protected functions and members
+ * shared by all
+ * @author Moti and Gil Mizrahi
  */
 public class MyServlet extends HttpServlet {
-
+    
     protected final String HEADER_HTML_FILEPATH = "htmls/header.htm";
     protected final String FOOTER_HTML_FILEPATH = "htmls/footer.htm";
     protected final String LOGOUT_HTML_FILEPATH = "htmls/logout.htm";
     protected final String BACK_HTML_FILEPATH   = "htmls/back.htm";
+    
     /**
-     * 
+     * reads a file and returns its content
      * @param filePath to read from
-     * @return
+     * @return content of a file
      * @throws FileNotFoundException 
      */
     protected String getFileContent(String filePath) throws FileNotFoundException
@@ -44,6 +46,13 @@ public class MyServlet extends HttpServlet {
 
         return buff.toString();
     }
+    /**
+     * redirects to login page if loggedIn attribute is not defined as true
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException
+     * @throws IOException 
+     */
     protected void redirectIfNotLoggedIn(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	Boolean isLoggedIn = (Boolean)request.getSession().getAttribute("loggedIn");
