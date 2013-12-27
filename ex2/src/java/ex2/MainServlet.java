@@ -22,7 +22,14 @@ public class MainServlet extends MyServlet {
     protected final String ADDFORM_HTML_FILEPATH = "htmls/addForm.htm";
     protected final String SEARCHFORM_HTML_FILEPATH = "htmls/searchForm.htm";
     
-    protected void printMain(HttpServletRequest request, HttpServletResponse response) throws IOException
+    /**
+     * prints the main page
+     * @param request servlet request
+     * @param response servlet response
+     * @throws IOException if an I/O error occurs
+     */
+    protected void printMain(HttpServletRequest request, 
+	    HttpServletResponse response) throws IOException
     {
 	try {
 	    PrintWriter out = response.getWriter();
@@ -33,13 +40,15 @@ public class MainServlet extends MyServlet {
             
             String addFormContent = getFileContent(ADDFORM_HTML_FILEPATH);
             
+	    // check for message
             String idExists = null;
             try { idExists = (String)request.getAttribute("idExist"); }
-            catch (Exception e) { }
+            catch (Exception e) { } // against failing convertions 
+	    
             if (idExists != null && idExists.equals("true")) 
             {
                 // print error
-                out.println("<p style=\"color: red;\">error while adding product to database: id already exists</p>");
+                out.println("<p class=\"errormsg\">error while adding product to database: id already exists</p>");
                 // add request paramters to the form
                 addFormContent = addFormContent.replace("name=\"addName\"", "name=\"addName\" value=\"" + request.getParameter("addName") +"\"");
                 addFormContent = addFormContent.replace("name=\"addID\"", "name=\"addID\" value=\"" + request.getParameter("addID") +"\"");
@@ -58,8 +67,11 @@ public class MainServlet extends MyServlet {
     
     /**
      * Handles the HTTP
-     * <code>GET</code> method.
-     *
+     * <code>GET</code> method.<br/>
+     * redirects to LoginServlet if not logged in<br/>
+     * dispatches to SearchServlet if searchName is defined<br/>
+     * printMain otherwise
+     * 
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -80,8 +92,11 @@ public class MainServlet extends MyServlet {
 
     /**
      * Handles the HTTP
-     * <code>POST</code> method.
-     *
+     * <code>POST</code> method.<br/>
+     * redirects to LoginServlet if not logged in<br/>
+     * dispatches to AddServlet if addName is defined<br/>
+     * printMain otherwise
+     * 
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -90,8 +105,8 @@ public class MainServlet extends MyServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+	
         redirectIfNotLoggedIn(request, response);
-        
         if (request.getParameter("addName") != null)
         {
             String idExists = null;
@@ -111,6 +126,7 @@ public class MainServlet extends MyServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "The MainServlet displays the main page and acts as a dispatcher "
+		+ "for search and add servlets";
     }// </editor-fold>
 }

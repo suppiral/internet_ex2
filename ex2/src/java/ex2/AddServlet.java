@@ -78,7 +78,7 @@ public class AddServlet extends MyServlet {
 	   
             request.setAttribute("idExist","true");
             request.getRequestDispatcher("MainServlet").forward(request, response);
-        } catch (SQLException e) { out.println("<p>Cannot connect to database. please try again later.</p>");
+        } catch (SQLException e) { out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
         }catch(Exception e){
         }
          finally {

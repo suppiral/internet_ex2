@@ -11,13 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * sets login as false and redirects to LoginServlet
  * @author Moti and Gil Mizrahi
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
 public class LogoutServlet extends MyServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -49,6 +48,13 @@ public class LogoutServlet extends MyServlet {
 	
 	logout(request, response);
     }
+    /**
+     * sets login as false and redirects to LoginServlet
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException
+     * @throws IOException 
+     */
     private void logout(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 	
@@ -63,6 +69,6 @@ public class LogoutServlet extends MyServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "sets login as false and redirects to LoginServlet";
     }// </editor-fold>
 }

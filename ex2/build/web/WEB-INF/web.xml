@@ -6,6 +6,16 @@
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>ex2.LoginServlet</servlet-class>
+        <init-param>
+            <description>username for login</description>
+            <param-name>username</param-name>
+            <param-value>admin</param-value>
+        </init-param>
+        <init-param>
+            <description>password for login</description>
+            <param-name>password</param-name>
+            <param-value>password</param-value>
+        </init-param>
     </servlet>
     <servlet>
         <servlet-name>MainServlet</servlet-name>
