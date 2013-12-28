@@ -13,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +45,7 @@ public class AddServlet extends MyServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch", "UseSpecificCatch"})
+    @SuppressWarnings({"UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch"})
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -79,7 +81,8 @@ public class AddServlet extends MyServlet {
             request.setAttribute("idExist","true");
             request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
-        }catch(Exception e){
+        } catch (Exception e) {
+            out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
         }
          finally {
             closeEverything(pst,conn);

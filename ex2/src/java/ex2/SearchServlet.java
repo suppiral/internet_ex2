@@ -113,6 +113,7 @@ public class SearchServlet extends MyServlet {
         }catch (SQLException e) {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
         }catch(Exception e){
+            out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
         }
          finally {
             //Closing connection,result sets and prepared statement
