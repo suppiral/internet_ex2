@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * SearchServlet Searches the data base for a product by a given name , id 
+ * or name and id.
+ * puts out a table with all product contents
  * @author Moti and Gil Mizrahi
  */
 public class SearchServlet extends MyServlet {

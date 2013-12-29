@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * AddServlet adds to the data base a product . if id of a product already exist
+ * it will return to main page with error to change id.
  * @author Moti and Gil Mizrahi
  */
 public class AddServlet extends MyServlet {
