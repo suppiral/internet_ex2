@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * shared by all
  * @author Moti and Gil Mizrahi
  */
-public class MyServlet extends HttpServlet {
+public abstract class MyServlet extends HttpServlet {
     
     protected final String HEADER_HTML_FILEPATH = "htmls/header.htm";
     protected final String FOOTER_HTML_FILEPATH = "htmls/footer.htm";
