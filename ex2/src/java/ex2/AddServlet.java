@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * AddServlet adds to the data base a product . if id of a product already exist
+ * it will return to main page with error to change id.
  * @author Moti and Gil Mizrahi
  */
 public class AddServlet extends MyServlet {
@@ -43,7 +44,7 @@ public class AddServlet extends MyServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch", "UseSpecificCatch"})
+    @SuppressWarnings({"UseSpecificCatch", "BroadCatchBlock", "TooBroadCatch"})
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -79,7 +80,8 @@ public class AddServlet extends MyServlet {
             request.setAttribute("idExist","true");
             request.getRequestDispatcher("MainServlet").forward(request, response);
         } catch (SQLException e) { out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
-        }catch(Exception e){
+        } catch (Exception e) {
+            out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
         }
          finally {
             closeEverything(pst,conn);

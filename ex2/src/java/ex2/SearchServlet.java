@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * SearchServlet Searches the data base for a product by a given name , id 
+ * or name and id.
+ * puts out a table with all product contents
  * @author Moti and Gil Mizrahi
  */
 public class SearchServlet extends MyServlet {
@@ -113,6 +115,7 @@ public class SearchServlet extends MyServlet {
         }catch (SQLException e) {
 	    out.println("<p>Cannot connect to database. please try again later.</p>");
         }catch(Exception e){
+            out.println("<p class=\"errormsg\">Cannot connect to database. please try again later.</p>");
         }
          finally {
             //Closing connection,result sets and prepared statement
